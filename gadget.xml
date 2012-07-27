@@ -126,7 +126,11 @@ function convertToJSON(data) {
     }
     finalObj.push(rowObj);
   }
-  return JSON.stringify({rows: finalObj});
+  var out = "{rows:[";
+  for (i in finalObj) {
+    out+= JSON.stringify(finalObj[i]) + "\n";
+  } out+= "]}";
+  return out;
 }
 </script>
 ]]>
