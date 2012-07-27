@@ -104,7 +104,6 @@ function convertToJSON(data) {
       }
 
       var value = data.getValue(row, col);
-      if (value = "") value = null;
       
       if (cellType == 'dict' || cellType == 'list') {
         try {
@@ -117,6 +116,7 @@ function convertToJSON(data) {
       } else if (cellType == 'date') {
         
       }
+      if (value == "") value = null;
       rowObj[columnLabel] = value;
     }
     finalObj.push(rowObj);
