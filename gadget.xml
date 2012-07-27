@@ -51,6 +51,7 @@ function loadVisualizationAPI() {
 function sendQuery() {
   prefs = new _IG_Prefs(); // User preferences
   gadgetHelper = new google.visualization.GadgetHelper();
+  console.log(prefs);
   var query = gadgetHelper.createQueryFromPrefs(prefs);
   query.send(handleQueryResponse);
 }
