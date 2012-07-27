@@ -51,7 +51,7 @@ function loadVisualizationAPI() {
 function sendQuery() {
   prefs = new _IG_Prefs(); // User preferences
   gadgetHelper = new google.visualization.GadgetHelper();
-  console.log(prefs);
+  prefs.headers=0;
   var query = gadgetHelper.createQueryFromPrefs(prefs);
   query.send(handleQueryResponse);
 }
@@ -90,16 +90,13 @@ function convertToJSON(data) {
   var numRows = data.getNumberOfRows();
   var numCols = data.getNumberOfColumns();
   var finalObj = [];
-  var has_labels = !!data.getColumnLabel(0);
-  //return JSON.stringify(has_labels);
-  for (var row = ((has_labels) ? 0 : 0); row < numRows; row++) {
+  for (var row = 2; row < numRows; row++) {
     var rowObj = {};
     for (var col = 0; col < data.getNumberOfColumns(); col++) {
       var cellType = data.getValue(0, col);
       var columnLabel;
       try {
-        if (has_labels) columnLabel = data.getColumnLabel(col);
-        else columnLabel = data.getValue(1, col).toLocaleLowerCase();
+        columnLabel = data.getValue(1, col).toLocaleLowerCase();
       } catch (e) {
         columnLabel = "undefined";
       }
