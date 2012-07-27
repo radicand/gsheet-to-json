@@ -23,8 +23,7 @@ default_value="0" datatype="enum" required="false">
 <UserPref name="output_type" display_name="Output Type"
 default_value="json" datatype="enum" required="false">
 <EnumValue value="json" display_value="JSON"/>
-<EnumValue value="xml" display_value="XML"/>
-<EnumValue value="sql" display_value="SQL"/>
+<EnumValue value="json-grf" display_value="JSON GRF"/>
 </UserPref>
 <Content type="html"><![CDATA[
 <link href="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.css" type="text/css" rel="stylesheet" />
@@ -80,10 +79,8 @@ function handleQueryResponse(response) {
   var output = "";
   if (outputType == "json") {
     output = convertToJSON(data);
-  } else if (outputType == "xml") {
-    output = convertToXML(data);
-  } else {
-    output = convertToSQL(data);
+  } else if (outputType == "json-grf") {
+    output = convertToJSON_GRF(data);
   }
 
   /**
@@ -94,6 +91,10 @@ function handleQueryResponse(response) {
   tableDiv.style.width = document.body.clientWidth + 'px';
   tableDiv.style.height = document.body.clientHeight + 'px';
   prettyPrint();
+}
+
+function convertToJSON_GRF(data) {
+  return convertToJSON(data);
 }
 
 function convertToJSON(data) {
@@ -112,42 +113,6 @@ function convertToJSON(data) {
     }
     var comma = (row + 1 != numRows) ? "," : "]";
     html.push("{" + rowObj.join("") + "}" + comma + "\n");
-  }
-  return html.join("");
-}
-
-function convertToXML(data) {
-  var html = ["&lt;rows&gt;"]; // start the HTML output string
-  for (var row = 0; row < data.getNumberOfRows(); row++) {
-    var rowObj = [];
-    for (var col = 0; col < data.getNumberOfColumns(); col++) {
-      var columnLabel = data.getColumnLabel(col);
-
-      var formattedValue = data.getFormattedValue(row, col);
-      formattedValue = escapeHtml(formattedValue);
-
-      rowObj.push("&lt;" + columnLabel + "&gt;&lt;![CDATA[ " + formattedValue + " ]]&gt;&lt;/" + columnLabel + "&gt;");
-    }
-    html.push("&lt;row&gt;" + rowObj.join("") + "&lt;/row&gt;");
-  }
-  html.push("&lt;/rows&gt;");
-  return html.join("");
-}
-
-function convertToSQL(data) {
-  var columnLabels = [];
-  for (var col = 0; col < data.getNumberOfColumns(); col++) {
-    columnLabels.push(data.getColumnLabel(col));
-  }
-  var html = [""];
-  for (var row = 0; row < data.getNumberOfRows(); row++) {
-    var rowObj = [];
-    for (var col = 0; col < data.getNumberOfColumns(); col++) {
-      var formattedValue = data.getFormattedValue(row, col);
-      formattedValue = formattedValue.replace(/"/g, "\"\"");
-      rowObj.push("\"" + formattedValue + "\"");
-    }
-    html.push("INSERT INTO `rows` (" + columnLabels.join(",") + ") VALUES(" + rowObj.join(",") + ");<br/>");
   }
   return html.join("");
 }
