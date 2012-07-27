@@ -119,7 +119,7 @@ function convertToJSON(data) {
       } else if (cellType == 'date') {
         try {
           value = Math.round(new Date(value).getTime()/1000);
-        }
+        } catch (e) {}
       }
       if (value == "") continue;
       rowObj[columnLabel] = value;
