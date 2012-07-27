@@ -54,7 +54,7 @@ function sendQuery() {
   var query = gadgetHelper.createQueryFromPrefs(prefs);
   console.log(query);
   for (k in query) {
-    if (query.hasOwnProperty(k) && && query[k].match && query[k].match(/^http/)) {
+    if (query.hasOwnProperty(k) && query[k].match && query[k].match(/^http/)) {
       query[k] += "&headers=0";
     }
   }
