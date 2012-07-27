@@ -102,7 +102,9 @@ function convertToJSON(data) {
       }
 
       var value = data.getValue(row, col);
+      if (value = "") value = null;
       
+      /*
       if (cellType == 'dict' || cellType == 'list') {
         try {
           value = JSON.parse(value);
@@ -114,11 +116,12 @@ function convertToJSON(data) {
       } else if (cellType == 'date') {
         
       }
+      */
       rowObj[columnLabel] = value;
     }
     finalObj.push(rowObj);
   }
-  return JSON.stringify(data);
+  return JSON.stringify({rows: finalObj});
 }
 
 /**
