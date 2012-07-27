@@ -82,8 +82,7 @@ function handleQueryResponse(response) {
   var tableDiv = _gel('tablediv');
   tableDiv.innerHTML = output;
   tableDiv.style.width = document.body.clientWidth + 'px';
-  tableDiv.style.height = document.body.clientHeight + 'px';
-  prettyPrint();
+  tableDiv.style.height = '100px';
 }
 
 function convertToJSON(data) {
@@ -107,7 +106,6 @@ function convertToJSON(data) {
       var value = data.getValue(row, col);
       if (value = "") value = null;
       
-      /*
       if (cellType == 'dict' || cellType == 'list') {
         try {
           value = JSON.parse(value);
@@ -119,25 +117,12 @@ function convertToJSON(data) {
       } else if (cellType == 'date') {
         
       }
-      */
       rowObj[columnLabel] = value;
     }
     finalObj.push(rowObj);
   }
   return JSON.stringify({rows: finalObj});
 }
-
-/**
-* Define any supporting code you need
-* (like this handy function to escape special characters for html output):
-*/
-function escapeHtml(text) {
-  if (text == null) {
-   return '';
-  }
-  return _hesc(text);
-}
-
 </script>
 ]]>
 </Content>
