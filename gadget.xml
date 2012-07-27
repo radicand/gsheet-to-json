@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="Spreadsheets Converter"
+description="This gadget will convert spreadsheet data to either JSON, XML, or SQL INSERT statements. The user must specify a range that includes column headers, but it can have any amount of columns or rows."
+author="Pamela Fox"
+author_affiliation="Google Inc."
+author_email="pamela.fox+coolgadget@gmail.com"
+screenshot="http://pamela.fox.googlepages.com/screenshot_spreadsheetsconverter.jpg"
+thumbnail="http://pamela.fox.googlepages.com/thumbnail_spreadsheetconverter.jpg" >
+<Require feature="idi"/>
+<Require feature="locked-domain" />
+</ModulePrefs>
+<UserPref name="_table_query_url" display_name="Data source url"
+required="true"/>
+<UserPref name="_table_query_refresh_interval"
+display_name="Data refresh interval (minutes)"
+default_value="0" datatype="enum" required="false">
+<EnumValue value="0" display_value="Do not refresh"/>
+<EnumValue value="60" display_value="1"/>
+<EnumValue value="300" display_value="5"/>
+<EnumValue value="1800" display_value="30"/>
+</UserPref>
+<UserPref name="output_type" display_name="Output Type"
+default_value="json" datatype="enum" required="false">
+<EnumValue value="json" display_value="JSON"/>
+<EnumValue value="xml" display_value="XML"/>
+<EnumValue value="sql" display_value="SQL"/>
+</UserPref>
+<Content type="html"><![CDATA[
+<link href="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.css" type="text/css" rel="stylesheet" />
+<script src="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.js"></script>
+<script src="http://www.google.com/jsapi" type="text/javascript"></script>
+
+<pre class="prettyprint" id="tablediv" style="overflow: auto; height:95%">
+<img src="http://www.google.com/ig/images/spinner.gif" />
+</pre>
+<script>
+
+/**
+* Load the APIs and run sendQuery when the load is complete
+*/
+var gadgetHelper = null;
+var prefs = null;
+
+_IG_RegisterOnloadHandler(loadVisualizationAPI);
+function loadVisualizationAPI() {
+  google.load("visualization", "1");
+  google.setOnLoadCallback(sendQuery);
+}
+
+/**
+* Create a query (shaped by the Gadget's user preferences), then
+* send it to the spreadsheet data source. Also give the name of a
+* function ("handleQueryResponse") to run once the spreadsheet data
+* is retrieved:
+*/
+function sendQuery() {
+  prefs = new _IG_Prefs(); // User preferences
+  gadgetHelper = new google.visualization.GadgetHelper();
+  var query = gadgetHelper.createQueryFromPrefs(prefs);
+  query.send(handleQueryResponse);
+}
+
+/**
+* The core logic. Process the spreadsheet data however you want.
+* In this case, we create HTML to be presented back to the user.
+* We'll use inline comments to provide a step-by-step description
+* of what we're doing:
+*/
+function handleQueryResponse(response) {
+
+  /**
+  * Use the visualization GadgetHelper class to handle errors
+  */
+  if (!gadgetHelper.validateResponse(response)) {
+    return; // Default error handling was done, just leave.
+  }
+  var data = response.getDataTable();
+  var outputType = prefs.getString("output_type");
+  var output = "";
+  if (outputType == "json") {
+    output = convertToJSON(data);
+  } else if (outputType == "xml") {
+    output = convertToXML(data);
+  } else {
+    output = convertToSQL(data);
+  }
+
+  /**
+  * Set the generated html into the container div.
+  */
+  var tableDiv = _gel('tablediv');
+  tableDiv.innerHTML = output;
+  tableDiv.style.width = document.body.clientWidth + 'px';
+  tableDiv.style.height = document.body.clientHeight + 'px';
+  prettyPrint();
+}
+
+function convertToJSON(data) {
+  var numRows = data.getNumberOfRows();
+  var numCols = data.getNumberOfColumns();
+  var html = ["["]; // start the HTML output string
+  for (var row = 0; row < numRows; row++) {
+    var rowObj = [];
+    for (var col = 0; col < data.getNumberOfColumns(); col++) {
+      var columnLabel = data.getColumnLabel(col);
+
+      var formattedValue = data.getFormattedValue(row, col);
+      formattedValue = escapeHtml(formattedValue).replace(/"/gi, '\\"');
+      var comma = (col + 1 != numCols) ? ", " : " ";
+      rowObj.push("\"" + columnLabel + "\"" + " : \"" + formattedValue + "\"" + comma);
+    }
+    var comma = (row + 1 != numRows) ? "," : "]";
+    html.push("{" + rowObj.join("") + "}" + comma + "\n");
+  }
+  return html.join("");
+}
+
+function convertToXML(data) {
+  var html = ["&lt;rows&gt;"]; // start the HTML output string
+  for (var row = 0; row < data.getNumberOfRows(); row++) {
+    var rowObj = [];
+    for (var col = 0; col < data.getNumberOfColumns(); col++) {
+      var columnLabel = data.getColumnLabel(col);
+
+      var formattedValue = data.getFormattedValue(row, col);
+      formattedValue = escapeHtml(formattedValue);
+
+      rowObj.push("&lt;" + columnLabel + "&gt;&lt;![CDATA[ " + formattedValue + " ]]&gt;&lt;/" + columnLabel + "&gt;");
+    }
+    html.push("&lt;row&gt;" + rowObj.join("") + "&lt;/row&gt;");
+  }
+  html.push("&lt;/rows&gt;");
+  return html.join("");
+}
+
+function convertToSQL(data) {
+  var columnLabels = [];
+  for (var col = 0; col < data.getNumberOfColumns(); col++) {
+    columnLabels.push(data.getColumnLabel(col));
+  }
+  var html = [""];
+  for (var row = 0; row < data.getNumberOfRows(); row++) {
+    var rowObj = [];
+    for (var col = 0; col < data.getNumberOfColumns(); col++) {
+      var formattedValue = data.getFormattedValue(row, col);
+      formattedValue = formattedValue.replace(/"/g, "\"\"");
+      rowObj.push("\"" + formattedValue + "\"");
+    }
+    html.push("INSERT INTO `rows` (" + columnLabels.join(",") + ") VALUES(" + rowObj.join(",") + ");<br/>");
+  }
+  return html.join("");
+}
+
+/**
+* Define any supporting code you need
+* (like this handy function to escape special characters for html output):
+*/
+function escapeHtml(text) {
+  if (text == null) {
+   return '';
+  }
+  return _hesc(text);
+}
+
+</script>
+]]>
+</Content>
+</Module>
