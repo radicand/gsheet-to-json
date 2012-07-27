@@ -52,7 +52,7 @@ function sendQuery() {
   prefs = new _IG_Prefs(); // User preferences
   gadgetHelper = new google.visualization.GadgetHelper();
   var query = gadgetHelper.createQueryFromPrefs(prefs);
-  console.log(query);
+  //console.log(query);
   for (k in query) {
     if (query.hasOwnProperty(k) && query[k].match && query[k].match(/^http/)) {
       query[k] += "&headers=0";
@@ -98,12 +98,12 @@ function convertToJSON(data) {
   for (var row = 2; row < numRows; row++) {
     var rowObj = {};
     for (var col = 0; col < data.getNumberOfColumns(); col++) {
-      var cellType = data.getValue(0, col);
+      var cellType = data.getFormattedValue(0, col);
       var columnLabel;
       try {
-        columnLabel = data.getValue(1, col).toLocaleLowerCase();
+        columnLabel = data.getFormattedValue(1, col).toLocaleLowerCase();
       } catch (e) {
-        console.log(e);
+        console.log(data);
         columnLabel = "undefined";
       }
 
