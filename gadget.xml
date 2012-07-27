@@ -12,7 +12,7 @@ author_email="code@radicand.org" >
 required="true"/>
 <UserPref name="_table_query_refresh_interval"
 display_name="Data refresh interval (minutes)"
-default_value="0" datatype="enum" required="false">
+default_value="1" datatype="enum" required="false">
 <EnumValue value="0" display_value="Do not refresh"/>
 <EnumValue value="60" display_value="1"/>
 <EnumValue value="300" display_value="5"/>
@@ -90,15 +90,17 @@ function convertToJSON(data) {
   var numRows = data.getNumberOfRows();
   var numCols = data.getNumberOfColumns();
   var finalObj = [];
-  for (var row = 2; row < numRows; row++) {
+  var has_labels = !!data.getColumnLabel(0);
+  for (var row = ((has_labels) ? 0 : 2); row < numRows; row++) {
     var rowObj = {};
     for (var col = 0; col < data.getNumberOfColumns(); col++) {
       var cellType = data.getValue(0, col);
-      
+      var columnLabel;
       try {
-        var columnLabel = data.getValue(1, col).toLocaleLowerCase();
+        if (has_labels) columnLabel = data.getColumnLabel(col);
+        columnLabel = data.getValue(1, col).toLocaleLowerCase();
       } catch (e) {
-        var columnLabel = "undefined";
+        columnLabel = "undefined";
       }
 
       var value = data.getValue(row, col);
