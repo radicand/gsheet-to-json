@@ -51,8 +51,9 @@ function loadVisualizationAPI() {
 function sendQuery() {
   prefs = new _IG_Prefs(); // User preferences
   gadgetHelper = new google.visualization.GadgetHelper();
-  prefs.headers=0;
   var query = gadgetHelper.createQueryFromPrefs(prefs);
+  console.log(prefs);
+  prefs.headers=0;
   query.send(handleQueryResponse);
 }
 
@@ -83,7 +84,7 @@ function handleQueryResponse(response) {
   var tableDiv = _gel('tablediv');
   tableDiv.innerHTML = output;
   tableDiv.style.width = document.body.clientWidth + 'px';
-  tableDiv.style.height = '100px';
+  tableDiv.style.height = document.body.clientHeight + 'px';
 }
 
 function convertToJSON(data) {
