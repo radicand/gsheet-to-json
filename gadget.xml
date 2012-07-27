@@ -91,6 +91,7 @@ function convertToJSON(data) {
   var numCols = data.getNumberOfColumns();
   var finalObj = [];
   var has_labels = !!data.getColumnLabel(0);
+  //return JSON.stringify(has_labels);
   for (var row = ((has_labels) ? 0 : 2); row < numRows; row++) {
     var rowObj = {};
     for (var col = 0; col < data.getNumberOfColumns(); col++) {
@@ -98,7 +99,7 @@ function convertToJSON(data) {
       var columnLabel;
       try {
         if (has_labels) columnLabel = data.getColumnLabel(col);
-        columnLabel = data.getValue(1, col).toLocaleLowerCase();
+        else columnLabel = data.getValue(1, col).toLocaleLowerCase();
       } catch (e) {
         columnLabel = "undefined";
       }
