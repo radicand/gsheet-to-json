@@ -52,8 +52,8 @@ function sendQuery() {
   prefs = new _IG_Prefs(); // User preferences
   gadgetHelper = new google.visualization.GadgetHelper();
   var query = gadgetHelper.createQueryFromPrefs(prefs);
-  console.log(prefs);
-  prefs.headers=0;
+  console.log(query);
+  query.headers=0;
   query.send(handleQueryResponse);
 }
 
