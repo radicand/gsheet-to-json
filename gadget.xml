@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Module>
-<ModulePrefs title="Spreadsheets Converter"
-description="This gadget will convert spreadsheet data to either JSON, XML, or SQL INSERT statements. The user must specify a range that includes column headers, but it can have any amount of columns or rows."
-author="Pamela Fox"
-author_affiliation="Google Inc."
-author_email="pamela.fox+coolgadget@gmail.com"
+<ModulePrefs title="Spreadsheet to JSON"
+description="This gadget will convert spreadsheet data to JSON. The first row must dictate the type of entry in the cell (string, dict, list), and the second row are the column headers."
+author="Nick Pappas feat. Pamela Fox"
+author_affiliation=""
+author_email="code@radicand.org"
 screenshot="http://pamela.fox.googlepages.com/screenshot_spreadsheetsconverter.jpg"
 thumbnail="http://pamela.fox.googlepages.com/thumbnail_spreadsheetconverter.jpg" >
 <Require feature="idi"/>
@@ -23,7 +23,6 @@ default_value="0" datatype="enum" required="false">
 <UserPref name="output_type" display_name="Output Type"
 default_value="json" datatype="enum" required="false">
 <EnumValue value="json" display_value="JSON"/>
-<EnumValue value="json-grf" display_value="JSON GRF"/>
 </UserPref>
 <Content type="html"><![CDATA[
 <link href="http://google-code-prettify.googlecode.com/svn/trunk/src/prettify.css" type="text/css" rel="stylesheet" />
@@ -79,8 +78,6 @@ function handleQueryResponse(response) {
   var output = "";
   if (outputType == "json") {
     output = convertToJSON(data);
-  } else if (outputType == "json-grf") {
-    output = convertToJSON_GRF(data);
   }
 
   /**
@@ -93,10 +90,6 @@ function handleQueryResponse(response) {
   prettyPrint();
 }
 
-function convertToJSON_GRF(data) {
-  return convertToJSON(data);
-}
-
 function convertToJSON(data) {
   var numRows = data.getNumberOfRows();
   var numCols = data.getNumberOfColumns();
@@ -105,10 +98,19 @@ function convertToJSON(data) {
     var rowObj = {};
     for (var col = 0; col < data.getNumberOfColumns(); col++) {
       var cellType = data.getValue(0, col);
-      var columnLabel = data.getValue(1, col);
+      var columnLabel = data.getValue(1, col).toLocaleLowerCase();
 
       var value = data.getValue(row, col);
       
+      if (cellType == 'dict' || cellType == 'list') {
+       try {
+         value = JSON.parse(value);
+       } catch (e) {
+         try {
+           value = JSON.parse(value.replace(/^{([^":]+)/, "{\"\$1\"}"));
+         } catch (e) {}
+       }
+      }
       rowObj[columnLabel] = value;
     }
     finalObj.push(rowObj);
