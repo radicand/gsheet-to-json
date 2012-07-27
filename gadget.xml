@@ -117,7 +117,9 @@ function convertToJSON(data) {
           } catch (e) {}
         }
       } else if (cellType == 'date') {
-        
+        try {
+          value = Math.round(new Date(value).getTime()/1000);
+        }
       }
       if (value == "") continue;
       rowObj[columnLabel] = value;
