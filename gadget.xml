@@ -107,7 +107,7 @@ function convertToJSON(data) {
          value = JSON.parse(value);
        } catch (e) {
          try {
-           value = JSON.parse(value.replace(/^{([^":]+)/, "{\"\$1\"}"));
+           value = JSON.parse(value.replace(/^{([^":]+)/, "{\"\$1\""));
          } catch (e) {}
        }
       }
