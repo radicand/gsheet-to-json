@@ -98,18 +98,25 @@ function convertToJSON(data) {
     var rowObj = {};
     for (var col = 0; col < data.getNumberOfColumns(); col++) {
       var cellType = data.getValue(0, col);
-      var columnLabel = data.getValue(1, col).toLocaleLowerCase();
+      
+      try {
+        var columnLabel = data.getValue(1, col).toLocaleLowerCase();
+      } catch (e) {
+        var columnLabel = "undefined";
+      }
 
       var value = data.getValue(row, col);
       
       if (cellType == 'dict' || cellType == 'list') {
-       try {
-         value = JSON.parse(value);
-       } catch (e) {
-         try {
-           value = JSON.parse(value.replace(/^{([^":]+)/, "{\"\$1\""));
-         } catch (e) {}
-       }
+        try {
+          value = JSON.parse(value);
+        } catch (e) {
+          try {
+            value = JSON.parse(value.replace(/^{([^":]+)/, "{\"\$1\""));
+          } catch (e) {}
+        }
+      } else if (cellType == 'date') {
+        
       }
       rowObj[columnLabel] = value;
     }
