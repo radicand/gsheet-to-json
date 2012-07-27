@@ -94,9 +94,9 @@ function convertToJSON(data) {
   var numRows = data.getNumberOfRows();
   var numCols = data.getNumberOfColumns();
   var finalObj = [];
-  for (var row = 0; row < numRows; row++) {
+  for (var row = 2; row < numRows; row++) {
     var rowObj = {};
-    for (var col = 2; col < data.getNumberOfColumns(); col++) {
+    for (var col = 0; col < data.getNumberOfColumns(); col++) {
       var cellType = data.getValue(0, col);
       var columnLabel = data.getValue(1, col).toLocaleLowerCase();
 
