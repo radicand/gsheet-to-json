@@ -103,6 +103,7 @@ function convertToJSON(data) {
       try {
         columnLabel = data.getValue(1, col).toLocaleLowerCase();
       } catch (e) {
+        console.log(e);
         columnLabel = "undefined";
       }
 
@@ -126,7 +127,7 @@ function convertToJSON(data) {
     }
     finalObj.push(rowObj);
   }
-  var out = "{rows:[";
+  var out = "{rows:[\n";
   for (i in finalObj) {
     out+= JSON.stringify(finalObj[i]) + "\n";
   } out+= "]}";
