@@ -121,7 +121,7 @@ function convertToJSON(data) {
           value = Math.round(new Date(value).getTime()/1000);
         } catch (e) {}
       }
-      if (value == "") continue;
+      if (!value || value == "") continue;
       rowObj[columnLabel] = value;
     }
     finalObj.push(rowObj);
