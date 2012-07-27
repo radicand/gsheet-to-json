@@ -53,7 +53,11 @@ function sendQuery() {
   gadgetHelper = new google.visualization.GadgetHelper();
   var query = gadgetHelper.createQueryFromPrefs(prefs);
   console.log(query);
-  query.headers=0;
+  for (k in query) {
+    if (query.hasOwnProperty(k) && query[k].match(/^http/)) {
+      query[k] += "&headers=0";
+    }
+  }
   query.send(handleQueryResponse);
 }
 
