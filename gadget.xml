@@ -100,21 +100,20 @@ function convertToJSON_GRF(data) {
 function convertToJSON(data) {
   var numRows = data.getNumberOfRows();
   var numCols = data.getNumberOfColumns();
-  var html = ["["]; // start the HTML output string
+  var finalObj = [];
   for (var row = 0; row < numRows; row++) {
-    var rowObj = [];
+    var rowObj = {};
     for (var col = 0; col < data.getNumberOfColumns(); col++) {
-      var columnLabel = data.getColumnLabel(col);
+      var cellType = data.getValue(0, col);
+      var columnLabel = data.getValue(1, col);
 
-      var formattedValue = data.getFormattedValue(row, col);
-      formattedValue = escapeHtml(formattedValue).replace(/"/gi, '\\"');
-      var comma = (col + 1 != numCols) ? ", " : " ";
-      rowObj.push("\"" + columnLabel + "\"" + " : \"" + formattedValue + "\"" + comma);
+      var value = data.getValue(row, col);
+      
+      rowObj[columnLabel] = value;
     }
-    var comma = (row + 1 != numRows) ? "," : "]";
-    html.push("{" + rowObj.join("") + "}" + comma + "\n");
+    finalObj.push(rowObj);
   }
-  return html.join("");
+  return JSON.stringify({rows: finalObj});
 }
 
 /**
