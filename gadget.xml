@@ -98,7 +98,7 @@ function convertToJSON(data) {
   for (var row = 2; row < numRows; row++) {
     var rowObj = {};
     for (var col = 0; col < data.getNumberOfColumns(); col++) {
-      var cellType = data.getFormattedValue(0, col);
+      var cellType = data.getValue(0, col);
       var columnLabel;
       try {
         columnLabel = data.getValue(1, col).toLocaleLowerCase();
