@@ -106,8 +106,11 @@ function convertToJSON(data) {
         console.log(data);
         columnLabel = "undefined";
       }
+      
+      if (!columnLabel) console.log(data);
 
       var value = data.getValue(row, col);
+      console.log(value);
       
       if (cellType == 'dict' || cellType == 'list') {
         try {
