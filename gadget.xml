@@ -101,16 +101,13 @@ function convertToJSON(data) {
       var cellType = data.getFormattedValue(0, col);
       var columnLabel;
       try {
-        columnLabel = data.getFormattedValue(1, col).toLocaleLowerCase();
+        columnLabel = data.getValue(1, col).toLocaleLowerCase();
       } catch (e) {
         console.log(data);
         columnLabel = "undefined";
       }
       
-      if (!columnLabel) console.log(data);
-
       var value = data.getValue(row, col);
-      console.log(value);
       
       if (cellType == 'dict' || cellType == 'list') {
         try {
