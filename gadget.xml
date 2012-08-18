@@ -101,7 +101,7 @@ function convertToJSON(data) {
       var cellType = data.getValue(0, col);
       var columnLabel;
       try {
-        columnLabel = data.getColumnProperties(col);
+        columnLabel = data;
         console.log(columnLabel);
       } catch (e) {
         console.log(data);
