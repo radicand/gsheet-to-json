@@ -98,11 +98,18 @@ function convertToJSON(data) {
   for (var row = 0; row < numRows; row++) {
     var rowObj = {};
     for (var col = 0; col < data.getNumberOfColumns(); col++) {
-      var cellType = data.getValue(0, col);
       var columnLabel;
+      var cellType;
+      var columnHeaders;
       try {
-        columnLabel = data;
-        console.log(columnLabel);
+        columnHeaders = data.getColumnLabel(col).toLowerCase().split(" ");
+        if (columnHeaders.length==2) {
+          columnLabel = columnHeaders[1];
+          cellType = columnHeaders[0];
+        } else {
+          columnLabel = columnHeaders[0];
+          cellType = "string";
+        }
       } catch (e) {
         console.log(data);
         columnLabel = "undefined";
