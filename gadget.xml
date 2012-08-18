@@ -127,10 +127,10 @@ function convertToJSON(data) {
     }
     finalObj.push(rowObj);
   }
-  var out = "{rows:[\n";
+  var out = "{\"rows\":[\n";
   for (i in finalObj) {
-    out+= JSON.stringify(finalObj[i]) + "\n";
-  } out+= "]}";
+    out+= JSON.stringify(finalObj[i]) + ",\n";
+  } out = out.replace(/,$/,'') += "]}";
   return out;
 }
 </script>
