@@ -36,7 +36,7 @@ default_value="json" datatype="enum" required="false">
 var gadgetHelper = null;
 var prefs = null;
 
-_IG_RegisterOnloadHandler(loadVisualizationAPI);
+gadgets.util.registerOnLoadHandler(loadVisualizationAPI);
 function loadVisualizationAPI() {
   google.load("visualization", "1");
   google.setOnLoadCallback(sendQuery);
@@ -49,13 +49,13 @@ function loadVisualizationAPI() {
 * is retrieved:
 */
 function sendQuery() {
-  prefs = new _IG_Prefs(); // User preferences
+  prefs = new gadgets.Prefs(); // User preferences
   gadgetHelper = new google.visualization.GadgetHelper();
   var query = gadgetHelper.createQueryFromPrefs(prefs);
   //console.log(query);
   for (k in query) {
     if (query.hasOwnProperty(k) && query[k].match && query[k].match(/^http/)) {
-      query[k] += "&headers=0";
+      query[k] += "&headers=2";
     }
   }
   query.send(handleQueryResponse);
@@ -95,13 +95,14 @@ function convertToJSON(data) {
   var numRows = data.getNumberOfRows();
   var numCols = data.getNumberOfColumns();
   var finalObj = [];
-  for (var row = 2; row < numRows; row++) {
+  for (var row = 0; row < numRows; row++) {
     var rowObj = {};
     for (var col = 0; col < data.getNumberOfColumns(); col++) {
       var cellType = data.getValue(0, col);
       var columnLabel;
       try {
-        columnLabel = data.getValue(1, col).toLocaleLowerCase();
+        columnLabel = data.getColumnProperties(col);
+        console.log(columnLabel);
       } catch (e) {
         console.log(data);
         columnLabel = "undefined";
