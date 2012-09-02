@@ -133,8 +133,10 @@ function convertToJSON(data) {
           if (dateparse[2] && dateparse[3]) {
             value += (new Date().getTimezoneOffset() * 60)
             if (dateparse[2] == "+") {
+              console.log("Applying TZoffset of +" + (parseInt(dateparse[3],10) * 60 * 60));
               value += (parseInt(dateparse[3],10) * 60 * 60)
             } else if (dateparse[2] == "-") {
+              console.log("Applying TZoffset of -" + (parseInt(dateparse[3],10) * 60 * 60));
               value -= (parseInt(dateparse[3],10) * 60 * 60)
             }
           }
