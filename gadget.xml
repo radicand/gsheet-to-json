@@ -139,6 +139,10 @@ function convertToJSON(data) {
             }
           }
         } catch (e) {}
+      } else if (cellType == "string") {
+        value = JSON.stringify(value);
+      } else if (cellType == "number") {
+        value = parseFloat(value, 10);
       }
       if (!value || value == "") continue;
       rowObj[columnLabel] = value;
