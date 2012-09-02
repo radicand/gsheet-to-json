@@ -9,6 +9,7 @@ Row 1 must dictate the type of data you have in that column:
 Supported Types:
 
  * `string` (or just nothing at all.  Values will be quoted and escaped)
+ * `number` (data will attempt to be converted using parseFloat)
  * `dict` (data in cell as {"keyhere": "Value Here", ...})
  * `list` (data in cell as ["item 1", "item 2"...].  Double quotes mandatory)
  * `date` (sets date as timestamp in your local timezone)
