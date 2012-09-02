@@ -125,9 +125,19 @@ function convertToJSON(data) {
             value = JSON.parse(value.replace(/^{([^":]+)/, "{\"\$1\""));
           } catch (e) {}
         }
-      } else if (cellType == 'date') {
+      } else if (cellType && cellType.match(/date((\-|\+)(\d))?/)) {
+        // forgive me for being redundant
+        var dateparse = cellType.match(/date((\-|\+)(\d))?/);
         try {
           value = Math.round(new Date(value).getTime()/1000);
+          if (dateparse[2] && dateparse[3]) {
+            value -= (new Date().getTimezoneOffset() * 60)
+            if (dateparse[2] == "+") {
+              value += (parseInt(dateparse[3],10) * 60 * 60)
+            } else if (dateparse[2] == "-") {
+              value -= (parseInt(dateparse[3],10) * 60 * 60)
+            }
+          }
         } catch (e) {}
       }
       if (!value || value == "") continue;
