@@ -5,7 +5,14 @@ Convert your Google Doc spreadsheets to JSON, in the browser.  This is not an AP
 
 It is for you to work with your data in Google Spreadsheets, then copy out the resulting JSON conversion to paste somewhere.
 
-Row 1 must dictate the type of data you have in that column (string (or blank), dict, or list are supported.)
+Row 1 must dictate the type of data you have in that column:
+Supported Types:
+
+ * `string` (or just nothing at all.  Values will be quoted and escaped)
+ * `dict` (data in cell as {"keyhere": "Value Here", ...})
+ * `list` (data in cell as ["item 1", "item 2"...].  Double quotes mandatory)
+ * `date` (sets date as timestamp in your local timezone)
+ * `date-#` (sets date in GMT-# timestamp)
 
 Row 2 must be the column headers.
 
