@@ -11,6 +11,7 @@ Supported Types:
  * `string` (or just nothing at all.  Values will be quoted and escaped)
  * `number` (data will attempt to be converted using parseFloat)
  * `dict` (data in cell as {"keyhere": "Value Here", ...})
+ * `boolean` (true/false -- not specially handled, but just works)
  * `list` (data in cell as ["item 1", "item 2"...].  Double quotes mandatory)
  * `date` (sets date as timestamp in your local timezone)
  * `date-#` (sets date in GMT-# timestamp)
