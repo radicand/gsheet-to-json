@@ -140,7 +140,7 @@ function convertToJSON(data) {
           }
         } catch (e) {}
       } else if (cellType == "string") {
-        value = JSON.stringify(value);
+        value = "" + value;
       } else if (cellType == "number") {
         value = parseFloat(value, 10);
       }
