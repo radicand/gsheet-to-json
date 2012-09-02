@@ -132,7 +132,7 @@ function convertToJSON(data) {
           value = Math.round(new Date(value).getTime()/1000);
           console.log("original time in your tz " + value);
           if (dateparse[2] && dateparse[3]) {
-            value += (new Date().getTimezoneOffset() * 60)
+            value -= (new Date().getTimezoneOffset() * 60)
             console.log("original time in UTC " + value);
             if (dateparse[2] == "+") {
               console.log("Applying TZoffset of +" + (parseInt(dateparse[3],10) * 60 * 60));
