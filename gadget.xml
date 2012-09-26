@@ -115,7 +115,6 @@ function convertToJSON(data) {
         columnLabel = "undefined";
       }
       var value = data.getValue(row, col);
-      console.log(value);
       
       if (cellType == 'dict' || cellType == 'list') {
         try {
@@ -153,7 +152,7 @@ function convertToJSON(data) {
   for (i in finalObj) {
     out+= JSON.stringify(finalObj[i]) + ",\n";
   } out = out.replace(/,\n$/,'\n') + "]}";
-  return out;
+  return out.replace(/</g,"&lt;").replace(/>/g, "&gt;");
 }
 </script>
 ]]>
