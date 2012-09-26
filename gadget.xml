@@ -105,7 +105,6 @@ function convertToJSON(data) {
         columnHeaders = data.getColumnLabel(col).toLowerCase().split(" ");
         if (columnHeaders.length==2) {
           columnLabel = columnHeaders[1];
-          console.log(data.getColumnProperties(col));
           cellType = columnHeaders[0];
         } else {
           columnLabel = columnHeaders[0];
@@ -116,6 +115,7 @@ function convertToJSON(data) {
         columnLabel = "undefined";
       }
       var value = data.getValue(row, col);
+      console.log(value);
       
       if (cellType == 'dict' || cellType == 'list') {
         try {
