@@ -27,6 +27,7 @@ Usage
 =====
 
 **GOOGLE APPS SCRIPT METHOD (PREFERRED)**
+
 1. Format your data as per the above
 2. Go to `Tools` > `Script Editor`
 3. Paste the contents of `Code.gs` into the box.
@@ -34,6 +35,7 @@ Usage
 5. A box will appear with the results
 
 **WIDGET METHOD (DEPRECATED)**
+
 1. Format your data as per the above
 2. Highlight your columns
 3. Go to "Insert"->"Gadget" and choose Custom.  Add url `https://raw.github.com/radicand/gsheet-to-json/master/gadget.xml`
