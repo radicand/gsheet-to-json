@@ -13,8 +13,7 @@ Supported Types:
  * `dict` (data in cell as {"keyhere": "Value Here", ...})
  * `boolean` (true/false -- not specially handled, but just works)
  * `list` (data in cell as ["item 1", "item 2"...].  Double quotes mandatory)
- * `date` (sets date as timestamp in your local timezone)
- * `date-#` (sets date in GMT-# timestamp)
+ * `date` (sets date as timestamp in the SPREADSHEET timezone [set in `File` > `Spreadsheet Settings`])
 
 Row 2 must be the column headers.
 
@@ -36,6 +35,7 @@ Usage
 
 **WIDGET METHOD (DEPRECATED)**
 
+0. If using dates, set your target timezone in `File` > `Spreadsheet Settings`
 1. Format your data as per the above
 2. Highlight your columns
 3. Go to "Insert"->"Gadget" and choose Custom.  Add url `https://raw.github.com/radicand/gsheet-to-json/master/gadget.xml`
