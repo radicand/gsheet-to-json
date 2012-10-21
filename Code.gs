@@ -71,6 +71,7 @@ var sheet = SpreadsheetApp.getActiveSpreadsheet();
       if (!value || value == "") value = null;
       
       //rowObj[columnLabel] = value;
+      if (columnLabel.match(/^\./)) continue;
       setData(columnLabel,value,rowObj);
     }
     finalObj.push(rowObj);
